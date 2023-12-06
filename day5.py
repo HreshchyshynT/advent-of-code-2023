@@ -2,42 +2,7 @@ from util import get_input
 
 
 def part_2(input: list[str]):
-    seeds_ranges = []
-    seeds = [int(x) for x in input[0].split(":")[1].strip().split(" ")]
-    for i in range(0, len(seeds), 2):
-        seeds_ranges.append(range(seeds[i], seeds[i] + seeds[i + 1]))
-
-    maps: list[list[tuple[range, range, int]]] = []  # change tuple to single list
-    m = []
-    for i in range(2, len(input)):
-        line = input[i].strip()
-        if line != "" and line[0].isdigit():
-            nums = [int(x) for x in line.split(" ")]
-            dst = range(nums[0], nums[0] + nums[2])
-            src = range(nums[1], nums[1] + nums[2])
-            m.append((dst, src, nums[1] - nums[0]))
-        elif len(m) > 0:
-            maps.append(m)
-            m = []
-    maps.append(m)
-
-    result = None
-
-    # 1. filter seeds by intersection
-    # 2. operation
-    # 3. filter seeds by intersection
-    # 4. operation
-    for seeds in seeds_ranges:
-        for seed in seeds:
-            mapped_value = seed
-            # for m in maps:
-            #     for dst, src, dif in m:
-            #         if mapped_value in src:
-            #             mapped_value -= dif
-            #             break
-            # if not result or mapped_value < result:
-            #     result = mapped_value
-    print(f"part 2: {result}")
+    pass
 
 
 def part_1(input: list[str]):
