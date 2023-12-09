@@ -153,7 +153,6 @@ def part_2(input: list[str]):
 
     result = 0
     rank = 0
-    print(hands_and_points)
     for hands in hands_and_points:
         for hand in hands:
             rank += 1
