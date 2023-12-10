@@ -3,6 +3,7 @@
 from dotenv import load_dotenv
 
 import day1
+import day10
 import day2
 import day3
 import day4
@@ -32,3 +33,5 @@ if __name__ == '__main__':
     # day8.run()
     print("day 9")
     day9.run()
+    print("day 10")
+    day10.run()
