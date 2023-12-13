@@ -17,7 +17,6 @@ def moves_to_s(current: Point, previous: Point, input: list[str]) -> int:
     symbol = input[current.i][current.j]
     count = 0
     while symbol != 'S':
-        print(f"current {current}")
         count += 1
         next = None
         if symbol == '|':
