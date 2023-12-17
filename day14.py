@@ -1,5 +1,3 @@
-import time
-
 from util import get_input
 
 
@@ -83,68 +81,53 @@ def to_key(platform: list[list[str]]) -> str:
     return str_platform
 
 
+def copy_platform(platform: list[list[str]]) -> list[list[str]]:
+    return [line.copy() for line in platform]
+
+
+def find_key_by_value(d, f):
+    for key in d:
+        if f(d[key]):
+            return key
+    return None
+
+
 def part_2(input: list[str]):
-    platform = [list(line) for line in input]
     cycles = 1_000_000_000
-    tilt_north_cache = {}
-    tilt_west_cache = {}
-    tilt_south_cache = {}
-    tilt_east_cache = {}
-    start = time.process_time_ns()
-    key = to_key(platform)
-    for i in range(cycles):
-        if key in tilt_north_cache:
-            platform, key = tilt_north_cache.get(key)
+    platform = [list(line) for line in input]
+    cycle_cache = {}
+    i = 0
+    while i < cycles:
+        key = to_key(platform)
+        if key in cycle_cache:
+            from_cache = cycle_cache[key]
+            cached_i = from_cache[1]
+            cycles_to_return = len(cycle_cache) - cached_i
+            left_after_repeats = (cycles - i) % cycles_to_return
+            last_hit = cached_i + left_after_repeats - 1
+            new_key = find_key_by_value(cycle_cache, lambda v: v[1] == last_hit)
+            platform = cycle_cache[new_key][0]
+            break
         else:
             tilt_platform_north(platform)
-            new_key = to_key(platform)
-            tilt_north_cache[key] = (platform.copy(), new_key)
-            key = new_key
-
-        if key in tilt_west_cache:
-            platform, key = tilt_west_cache.get(key)
-        else:
             tilt_platform_west(platform)
-            new_key = to_key(platform)
-            tilt_west_cache[key] = (platform.copy(), new_key)
-            key = new_key
-
-        if key in tilt_south_cache:
-            platform, key = tilt_south_cache.get(key)
-        else:
             tilt_platform_south(platform)
-            new_key = to_key(platform)
-            tilt_south_cache[key] = (platform.copy(), new_key)
-            key = new_key
-
-        if key in tilt_east_cache:
-            platform, key = tilt_east_cache.get(key)
-        else:
             tilt_platform_east(platform)
-            new_key = to_key(platform)
-            tilt_east_cache[key] = (platform.copy(), new_key)
-            key = new_key
-        # print(f"i = {i}, h {hits} m {miss}")
-    print(f"ends in  {time.process_time_ns() - start}")
-    result = total_load(platform)
-    print(f"part 2: {result}")
+            cycle_cache[key] = (copy_platform(platform), i)
+        i += 1
+    print(f"part 2: {total_load(platform)}")
 
 
 def part_1(input: list[str]):
     platform = [list(line) for line in input]
-    result = 0
     tilt_platform_north(platform)
-    for i in range(len(platform)):
-        for j in range(len(platform[i])):
-            if platform[i][j] == 'O':
-                result += len(platform) - i
-    print(f"part 1: {result}")
+    print(f"part 1: {total_load(platform)}")
 
 
 def run():
     input = get_input(14)
-    part_1(test_input.splitlines())
-    part_2(test_input.splitlines())
+    part_1(input.splitlines())
+    part_2(input.splitlines())
 
 
 test_input = """
